@@ -1,3 +1,5 @@
-import Run from "./server";
+import { Server } from "./server";
 
-Run(6000);
+const server = Server.Instance(8000);
+
+server.run();
