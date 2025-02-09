@@ -1,5 +1,9 @@
 export const rootHandler = () => {
   return {
-    body: "hello",
+    title: "Welcome to WebRTC SFU",
   };
+};
+
+export const healthCheckHandler = () => {
+  return "OK";
 };
