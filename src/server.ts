@@ -24,7 +24,7 @@ export class Server {
   public run() {
     const serverOptions: ServerOptions = {
       port: this._port,
-      hostname: "0.0.0.0",
+      hostname: "127.0.0.1",
     };
 
     if (this._tls) {
@@ -37,8 +37,10 @@ export class Server {
       .use(rootRoute())
       .listen(serverOptions);
 
-    console.info(
-      `🦊 Server is running at http://${app.server?.hostname}:${app.server?.port}`
-    );
+    const serverMessage = `Server is running at http${this._tls ? "s" : ""}://${
+      app.server?.hostname
+    }:${app.server?.port}`;
+
+    console.info(serverMessage);
   }
 }
