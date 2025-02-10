@@ -1,20 +1,20 @@
 import { createWorker, types } from "mediasoup";
 
-import { MediasoupTLS } from "@/types/mediasoup";
+import { WebRTCTLS } from "@/types/webrtc";
 
 export class WebRTC {
   private static _instance: WebRTC;
-  private _tls: MediasoupTLS;
+  private _tls: WebRTCTLS;
   private _logLevel: types.WorkerLogLevel;
-  private _workers: types.Worker[];
+  private _worker: types.Worker | null;
 
-  private constructor(tls: MediasoupTLS, logLevel: types.WorkerLogLevel) {
+  private constructor(tls: WebRTCTLS, logLevel: types.WorkerLogLevel) {
     this._tls = tls;
     this._logLevel = logLevel;
-    this._workers = [];
+    this._worker = null;
   }
 
-  public static Instance(tls: MediasoupTLS, logLevel: types.WorkerLogLevel) {
+  public static Instance(tls: WebRTCTLS, logLevel: types.WorkerLogLevel) {
     return this._instance || (this._instance = new this(tls, logLevel));
   }
 
@@ -25,6 +25,10 @@ export class WebRTC {
       dtlsPrivateKeyFile: this._tls.key,
     });
 
-    this._workers.push(worker);
+    this._worker = worker;
+  }
+
+  public get worker() {
+    return this._worker;
   }
 }

@@ -1,4 +1,4 @@
-export type MediasoupTLS = {
+export type WebRTCTLS = {
   key: string;
   cert: string;
 };
