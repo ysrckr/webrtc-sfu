@@ -1,3 +1,5 @@
+import { MediaKind, RtpCodecCapability } from "mediasoup/node/lib/types";
+
 import { Server } from "./server";
 import { TLS } from "./types/server";
 import { Server as WSServer } from "socket.io";
@@ -20,7 +22,38 @@ const webrtcTLS = {
   cert: tlsCertPath,
 };
 
+const mediaCodecs: RtpCodecCapability[] = [
+  {
+    kind: "audio" as MediaKind,
+    mimeType: "audio/opus",
+    clockRate: 48000,
+    channels: 2,
+  },
+  {
+    kind: "video" as MediaKind,
+    mimeType: "video/VP8",
+    clockRate: 90000,
+  },
+  {
+    kind: "video" as MediaKind,
+    mimeType: "video/VP9",
+    clockRate: 90000,
+  },
+  {
+    kind: "video" as MediaKind,
+    mimeType: "video/h264",
+    clockRate: 90000,
+  },
+  {
+    kind: "video" as MediaKind,
+    mimeType: "video/h265",
+    clockRate: 90000,
+  },
+];
+
 const webrtc = WebRTC.Instance(webrtcTLS, workerLogLevel);
+webrtc.newWorker();
+const router = await webrtc.worker?.createRouter({ mediaCodecs });
 
 const server = Server.Instance(port, tls);
 

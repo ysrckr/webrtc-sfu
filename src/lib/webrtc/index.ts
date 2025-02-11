@@ -26,6 +26,11 @@ export class WebRTC {
     });
 
     this._worker = worker;
+
+    this._worker.on("died", (error) => {
+      console.error("Mediasoup worker has died with error of " + error.message);
+      setTimeout(() => process.exit(1), 2000);
+    });
   }
 
   public get worker() {
