@@ -8,7 +8,9 @@
   "dependencies": {
     "@elysiajs/swagger": "^1.2.0",
     "elysia": "latest",
-    "mediasoup": "^3.15.3"
+    "import": "^0.0.6",
+    "mediasoup": "^3.15.3",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "bun-types": "latest"

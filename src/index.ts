@@ -1,5 +1,6 @@
 import { Server } from "./server";
 import { TLS } from "./types/server";
+import { Server as WSServer } from "socket.io";
 import { WebRTC } from "./lib/webrtc";
 import { join } from "node:path";
 

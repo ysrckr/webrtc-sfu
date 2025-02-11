@@ -1,6 +1,7 @@
-import Elysia, { ElysiaConfig } from "elysia";
+import { Elysia, t } from "elysia";
 import { ServerOptions, TLS } from "./types/server";
 
+import { ElysiaWS } from "elysia/dist/ws";
 import { Swagger } from "./config/swagger";
 import { rootRoute } from "./routes/root";
 import { swagger } from "@elysiajs/swagger";
@@ -35,6 +36,18 @@ export class Server {
     const app = new Elysia({ prefix: `/api/v${this._version}` })
       .use(swagger(swg.config))
       .use(rootRoute())
+      .ws("/peer", {
+        body: t.Object({
+          message: t.String(),
+        }),
+
+        message(ws, { message }) {
+          ws.send({
+            message,
+            time: Date.now(),
+          });
+        },
+      })
       .listen(serverOptions);
 
     const serverMessage = `Server is running at http${this._tls ? "s" : ""}://${
