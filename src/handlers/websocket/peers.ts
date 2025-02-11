@@ -4,13 +4,11 @@ import { t } from "elysia";
 export const peersHandler = () => {
   return {
     body: t.Object({
-      message: t.String(),
+      room: t.String(),
+      peer: t.String(),
     }),
-    message(ws: ElysiaWS, { message }: { message: string }) {
-      ws.send({
-        message,
-        time: Date.now(),
-      });
+    message(ws: ElysiaWS, { room, peer }: { room: string; peer: string }) {
+      ws.send(`Hello, ${peer}! You are in room ${room}`);
     },
   };
 };

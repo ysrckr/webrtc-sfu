@@ -21,7 +21,7 @@ const webrtcTLS = {
   cert: tlsCertPath,
 };
 
-const webrtc = WebRTC.Instance(webrtcTLS, workerLogLevel);
+export const webrtc = WebRTC.Instance(webrtcTLS, workerLogLevel);
 
 const server = Server.Instance(port, tls);
 

@@ -3,6 +3,7 @@ import { ServerOptions, TLS } from "./types/server";
 
 import { ElysiaWS } from "elysia/dist/ws";
 import { Swagger } from "./config/swagger";
+import { peersHandler } from "./handlers/websocket/peers";
 import { peersRoute } from "./routes/websocket/peers";
 import { rootRoute } from "./routes/root";
 import { swagger } from "@elysiajs/swagger";
@@ -37,15 +38,7 @@ export class Server {
     const app = new Elysia({ prefix: `/api/v${this._version}` })
       .use(swagger(swg.config))
       .use(rootRoute())
-      .ws("/peer", {
-        body: t.Object({
-          room: t.String(),
-          peer: t.String(),
-        }),
-        message(ws, { room, peer }) {
-          ws.send(`Hello, ${peer}! You are in room ${room}`);
-        },
-      })
+      .use(peersRoute())
       .listen(serverOptions);
 
     const serverMessage = `Server is running at http${this._tls ? "s" : ""}://${
