@@ -1,3 +1,7 @@
+import {
+  MediaKind,
+  RtpCodecCapability,
+} from "mediasoup/node/lib/rtpParametersTypes";
 import { createWorker, types } from "mediasoup";
 
 import { WebRTCTLS } from "@/types/webrtc";
@@ -7,11 +11,42 @@ export class WebRTC {
   private _tls: WebRTCTLS;
   private _logLevel: types.WorkerLogLevel;
   private _worker: types.Worker | null;
+  private _router: types.Router | null;
+  private _mediaCodecs: RtpCodecCapability[];
 
   private constructor(tls: WebRTCTLS, logLevel: types.WorkerLogLevel) {
     this._tls = tls;
     this._logLevel = logLevel;
     this._worker = null;
+    this._router = null;
+    this._mediaCodecs = [
+      {
+        kind: "audio" as MediaKind,
+        mimeType: "audio/opus",
+        clockRate: 48000,
+        channels: 2,
+      },
+      {
+        kind: "video" as MediaKind,
+        mimeType: "video/VP8",
+        clockRate: 90000,
+      },
+      {
+        kind: "video" as MediaKind,
+        mimeType: "video/VP9",
+        clockRate: 90000,
+      },
+      {
+        kind: "video" as MediaKind,
+        mimeType: "video/h264",
+        clockRate: 90000,
+      },
+      {
+        kind: "video" as MediaKind,
+        mimeType: "video/h265",
+        clockRate: 90000,
+      },
+    ];
   }
 
   public static Instance(tls: WebRTCTLS, logLevel: types.WorkerLogLevel) {
@@ -33,7 +68,29 @@ export class WebRTC {
     });
   }
 
+  public async newRouter(mediaCodecs?: RtpCodecCapability[]) {
+    let router;
+    if (!mediaCodecs) {
+      router = await this._worker?.createRouter({
+        mediaCodecs: this._mediaCodecs,
+      });
+    } else {
+      router = await this._worker?.createRouter({ mediaCodecs });
+    }
+
+    if (router) {
+      this._router = router;
+      return;
+    }
+
+    this._router = null;
+  }
+
   public get worker() {
     return this._worker;
+  }
+
+  public async router() {
+    return this._router;
   }
 }
