@@ -1,4 +1,6 @@
-export const rootHandler = () => {
+
+
+export const rootHandler = async () => {
   return {
     title: "Welcome to WebRTC SFU",
   };

@@ -23,6 +23,26 @@ const webrtcTLS = {
 
 export const webrtc = WebRTC.Instance(webrtcTLS, workerLogLevel);
 
+let worker;
+let router;
+
+webrtc
+  .newWorker()
+  .then((w) => {
+    worker = w;
+
+    console.log("New worker created:", worker);
+  })
+  .catch((err) => {
+    console.error("Error creating worker:", err);
+  });
+
+webrtc.newRouter(worker).then((r) => {
+  router = r;
+
+  console.log("New router created:", router);
+});
+
 const server = Server.Instance(port, tls);
 
 server.run();

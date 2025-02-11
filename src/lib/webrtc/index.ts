@@ -90,7 +90,7 @@ export class WebRTC {
     return this._worker;
   }
 
-  public async router() {
+  public get router() {
     return this._router;
   }
 }
