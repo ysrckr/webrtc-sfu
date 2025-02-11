@@ -22,10 +22,6 @@ const webrtcTLS = {
 };
 
 const webrtc = WebRTC.Instance(webrtcTLS, workerLogLevel);
-webrtc.newWorker();
-webrtc.newRouter();
-
-
 
 const server = Server.Instance(port, tls);
 

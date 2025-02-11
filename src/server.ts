@@ -37,7 +37,15 @@ export class Server {
     const app = new Elysia({ prefix: `/api/v${this._version}` })
       .use(swagger(swg.config))
       .use(rootRoute())
-      .use(peersRoute)
+      .ws("/peer", {
+        body: t.Object({
+          room: t.String(),
+          peer: t.String(),
+        }),
+        message(ws, { room, peer }) {
+          ws.send(`Hello, ${peer}! You are in room ${room}`);
+        },
+      })
       .listen(serverOptions);
 
     const serverMessage = `Server is running at http${this._tls ? "s" : ""}://${
